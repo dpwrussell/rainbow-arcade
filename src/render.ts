@@ -7,6 +7,35 @@ export interface Icons {
   goal: string;
 }
 
+/** An icon is an emoji, or the file name of a picture in public/. */
+export const isImage = (icon: string) => /\.(svg|png|jpe?g|gif|webp)$/i.test(icon);
+
+const images = new Map<string, HTMLImageElement>();
+let onImageLoad = () => {};
+/** Called when a picture icon finishes loading, so the maze can be redrawn. */
+export const setImageLoadHandler = (fn: () => void) => (onImageLoad = fn);
+
+function image(src: string): HTMLImageElement {
+  let img = images.get(src);
+  if (!img) {
+    img = new Image();
+    img.onload = () => onImageLoad();
+    img.src = src;
+    images.set(src, img);
+  }
+  return img;
+}
+
+function drawIcon(ctx: CanvasRenderingContext2D, icon: string, [x, y]: [number, number], cell: number) {
+  if (isImage(icon)) {
+    const img = image(icon);
+    const s = cell * 0.8;
+    if (img.complete && img.naturalWidth) ctx.drawImage(img, x - s / 2, y - s / 2, s, s);
+  } else {
+    ctx.fillText(icon, x, y);
+  }
+}
+
 /** Size the canvas to fit the window and return the size of one cell in CSS pixels. */
 export function fitCanvas(canvas: HTMLCanvasElement, maze: Maze): number {
   const top = canvas.getBoundingClientRect().top + window.scrollY;
@@ -23,7 +52,14 @@ export function fitCanvas(canvas: HTMLCanvasElement, maze: Maze): number {
   return cell;
 }
 
-export function draw(canvas: HTMLCanvasElement, maze: Maze, x: Exploration, icons: Icons, cell: number) {
+export function draw(
+  canvas: HTMLCanvasElement,
+  maze: Maze,
+  x: Exploration,
+  icons: Icons,
+  cell: number,
+  gemCollected: boolean,
+) {
   const ctx = canvas.getContext('2d')!;
   const { colors } = config;
   const W = maze.cols * cell;
@@ -61,10 +97,24 @@ export function draw(canvas: HTMLCanvasElement, maze: Maze, x: Exploration, icon
     }
   }
   ctx.stroke();
-  ctx.lineWidth = wall * 2; // outer border (half of it is clipped by the canvas edge)
-  ctx.strokeRect(0, 0, W, H);
 
-  // 3. The route taken, as a line from the start to the player.
+  // Outer border, with a gap at the entrance (left) and the exit (right).
+  // It's twice as thick because half of it is clipped by the canvas edge.
+  const inY = cellXY(maze.entrance)[1] * cell;
+  const outY = cellXY(maze.exit)[1] * cell;
+  ctx.lineWidth = wall * 2;
+  ctx.beginPath();
+  ctx.moveTo(0, inY);
+  ctx.lineTo(0, 0);
+  ctx.lineTo(W, 0);
+  ctx.lineTo(W, outY);
+  ctx.moveTo(W, outY + cell);
+  ctx.lineTo(W, H);
+  ctx.lineTo(0, H);
+  ctx.lineTo(0, inY + cell);
+  ctx.stroke();
+
+  // 3. The route taken, as a line from where this stage started to the player.
   ctx.strokeStyle = colors.path;
   ctx.lineWidth = Math.max(3, cell / 6);
   ctx.lineJoin = 'round';
@@ -72,10 +122,13 @@ export function draw(canvas: HTMLCanvasElement, maze: Maze, x: Exploration, icon
   x.route.forEach((c, i) => (i ? ctx.lineTo(...centre(c)) : ctx.moveTo(...centre(c))));
   ctx.stroke();
 
-  // 4. Emoji icons.
+  // 4. Icons. The door is faint until the treasure has been collected.
   ctx.font = `${Math.floor(cell * 0.72)}px serif`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  if (!x.won) ctx.fillText(icons.goal, ...centre(maze.goal));
-  ctx.fillText(icons.character, ...centre(x.current));
+  ctx.globalAlpha = gemCollected ? 1 : 0.35;
+  drawIcon(ctx, config.exitIcon, centre(maze.exit), cell);
+  ctx.globalAlpha = 1;
+  if (!gemCollected) drawIcon(ctx, icons.goal, centre(maze.gem), cell);
+  drawIcon(ctx, icons.character, centre(x.current), cell);
 }

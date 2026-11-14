@@ -20,9 +20,15 @@ export interface Maze {
   cols: number;
   rows: number;
   graph: Graph;
-  start: Cell;
-  goal: Cell;
-  tree: Tree;
+  /** Gap in the left wall where the player starts. */
+  entrance: Cell;
+  /** The treasure, in the middle. */
+  gem: Cell;
+  /** Gap in the right wall: the way out once the gem is collected. */
+  exit: Cell;
+  /** The maze rooted at the entrance (stage 1) and at the gem (stage 2). */
+  fromEntrance: Tree;
+  fromGem: Tree;
 }
 
 /** Turn a text seed (from the URL) into the number rot.js wants. FNV-1a hash. */
@@ -66,9 +72,13 @@ export function generateMaze(cols: number, rows: number, seed: string): Maze {
     }
   }
 
-  const start = cellId(0, 0);
-  const tree = rootTree(graph, start);
-  // The goal goes as far from the start as possible.
-  const goal = Object.keys(tree.dist).reduce((a, b) => (tree.dist[b] > tree.dist[a] ? b : a));
-  return { cols, rows, graph, start, goal, tree };
+  // The gem sits in the middle. One BFS from it tells us how far every cell is,
+  // so the entrance and exit go on the left and right edge cells farthest from it.
+  const gem = cellId(Math.floor(cols / 2), Math.floor(rows / 2));
+  const fromGem = rootTree(graph, gem);
+  const farthest = (x: number) =>
+    Array.from({ length: rows }, (_, y) => cellId(x, y)).reduce((a, b) => (fromGem.dist[b] > fromGem.dist[a] ? b : a));
+  const entrance = farthest(0);
+  const exit = farthest(cols - 1);
+  return { cols, rows, graph, entrance, gem, exit, fromEntrance: rootTree(graph, entrance), fromGem };
 }

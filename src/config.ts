@@ -2,7 +2,7 @@
 // decides lives here: names, sizes, characters, colours and messages.
 
 export const config = {
-  title: 'Maze Adventure',
+  title: 'Amazing Maze',
 
   // Each level is a maze size: bigger means trickier.
   levels: [
@@ -14,12 +14,14 @@ export const config = {
   ],
 
   // Who walks through the maze? Players can pick one of these in the game.
-  characters: ['🐱', '🐶', '🦄', '🐰', '🐸', '🐢', '🦖', '🚀'],
-  // What are they looking for?
-  goals: ['🧀', '💎', '⭐', '🏰', '🍓', '🎁', '🍦', '🌈', '🦴'],
+  characters: ['👧', '👦', '🐱', '🐶', '🦄', '🐰', '🐸', '🐢', '🚀'],
+  // What treasure is hidden in the middle? Emoji work, and so do pictures:
+  // put an image (like a scanned drawing) in the public/ folder and use its file name.
+  goals: ['rainbow-gem.svg', '💎', '🧀', '⭐', '🏰', '🍓', '🎁', '🍦', '🌈', '🦴'],
 
   defaultCharacter: '🐱',
-  defaultGoal: '🧀',
+  defaultGoal: 'rainbow-gem.svg',
+  exitIcon: '🚪',
 
   colors: {
     floor: '#fffaf0', // unexplored maze floor
@@ -30,7 +32,11 @@ export const config = {
     path: '#ff7a1a', // the line showing your route
   },
 
-  winMessage: 'You did it! 🎉',
+  messages: {
+    find: 'Find the treasure in the middle!',
+    escape: 'You got it! Now find the way out! 🚪',
+    win: 'You did it! 🎉',
+  },
   confetti: true,
 };
 
