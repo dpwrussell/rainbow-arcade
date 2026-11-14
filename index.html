@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maze Adventure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <h1 id="title"></h1>
+      <nav id="levels" aria-label="Maze size"></nav>
+    </header>
+    <section class="pickers">
+      <div><span>Me:</span><span id="characters" class="emoji-row"></span></div>
+      <div><span>Find:</span><span id="goals" class="emoji-row"></span></div>
+    </section>
+    <main>
+      <canvas id="maze" aria-label="Maze. Use the arrow keys to move."></canvas>
+      <div id="win" hidden>
+        <p id="win-message"></p>
+        <button id="again">Play again</button>
+        <button id="next">Bigger maze ➜</button>
+      </div>
+    </main>
+    <footer>
+      <div id="pad" aria-label="Move">
+        <button data-dir="up" aria-label="Up">⬆️</button>
+        <button data-dir="left" aria-label="Left">⬅️</button>
+        <button data-dir="down" aria-label="Down">⬇️</button>
+        <button data-dir="right" aria-label="Right">➡️</button>
+      </div>
+      <button id="new">🔀 New maze</button>
+    </footer>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
