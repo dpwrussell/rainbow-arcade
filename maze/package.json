@@ -1,0 +1,31 @@
+{
+  "name": "amazing-maze",
+  "version": "1.0.0",
+  "description": "A maze game for kids",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "type": "module",
+  "dependencies": {
+    "canvas-confetti": "^1.9.4",
+    "graphology": "^0.26.0",
+    "graphology-shortest-path": "^2.1.0",
+    "rot-js": "^2.2.1"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "graphology-types": "^0.24.8",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^4.1.12"
+  },
+  "private": true,
+  "game": {
+    "title": "Amazing Maze",
+    "description": "Collect the rainbow gem in the middle, then find the way out!",
+    "icon": "rainbow-gem.svg"
+  }
+}

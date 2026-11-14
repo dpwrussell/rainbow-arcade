@@ -40,3 +40,5 @@ footer { display: flex; align-items: center; gap: 24px; }
 @media (hover: hover) and (pointer: fine) { #pad { display: none; } }
 #status { margin: 0 0 6px; font-size: 1.2rem; min-height: 1.5em; }
 .emoji-row button img { width: 1.5rem; height: 1.5rem; vertical-align: middle; }
+#home { align-self: flex-start; color: inherit; font-size: 1rem; text-decoration: none; }
+#home:hover { text-decoration: underline; }

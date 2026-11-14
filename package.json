@@ -1,26 +1,14 @@
 {
-  "name": "maze-adventure",
-  "version": "1.0.0",
-  "description": "A maze game for kids",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "test": "vitest run"
-  },
+  "name": "rainbow-arcade",
+  "private": true,
   "type": "module",
-  "dependencies": {
-    "canvas-confetti": "^1.9.4",
-    "graphology": "^0.26.0",
-    "graphology-shortest-path": "^2.1.0",
-    "rot-js": "^2.2.1"
-  },
-  "devDependencies": {
-    "@types/canvas-confetti": "^1.9.0",
-    "graphology-types": "^0.24.8",
-    "typescript": "^7.0.2",
-    "vite": "^8.3.8",
-    "vitest": "^4.1.12"
-  },
-  "private": true
+  "description": "The Rainbow Arcade: games we made together",
+  "workspaces": [
+    "maze"
+  ],
+  "scripts": {
+    "test": "npm test --workspaces --if-present",
+    "build": "npm run build --workspaces && node scripts/build-site.mjs",
+    "preview": "npm run build && vite preview --outDir dist"
+  }
 }
