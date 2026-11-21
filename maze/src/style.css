@@ -1,5 +1,5 @@
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; }
+html, body { margin: 0; height: 100%; overflow: hidden; }
 body {
   font-family: 'Fredoka', ui-rounded, system-ui, sans-serif;
   background: #f3ecff;

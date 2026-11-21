@@ -1,5 +1,6 @@
 import confetti from 'canvas-confetti';
 import './style.css';
+import { lockdown } from '../../shared/lockdown';
 import { config } from './config';
 import { cellId, cellXY, generateMaze, randomSeed, type Maze } from './maze';
 import { Exploration } from './explore';
@@ -152,5 +153,6 @@ window.addEventListener('hashchange', () => {
 setImageLoadHandler(() => redraw());
 bindInput(canvas, move);
 
+lockdown();
 readHash();
 newGame();

@@ -42,7 +42,7 @@ export function fitCanvas(canvas: HTMLCanvasElement, maze: Maze): number {
   const footer = document.querySelector('footer')!.getBoundingClientRect().height;
   const availW = document.documentElement.clientWidth - 32;
   const availH = window.innerHeight - top - footer - 24;
-  const cell = Math.max(12, Math.floor(Math.min(availW / maze.cols, availH / maze.rows, 88)));
+  const cell = Math.max(6, Math.floor(Math.min(availW / maze.cols, availH / maze.rows, 88)));
   const dpr = window.devicePixelRatio || 1;
   canvas.style.width = `${cell * maze.cols}px`;
   canvas.style.height = `${cell * maze.rows}px`;
